@@ -1,23 +1,65 @@
-import {ButtonComponent} from "../../components/back-button/index.js";
 import {ProductCardComponent} from "../../components/product-card/index.js";
+import {ProductPage} from "../product/index.js";
 
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
     }
 
+    get pageRoot() {
+        return document.getElementById('main-page')
+    }
+
+    getHTML() {
+        return (
+            `
+                <div class="container mt-4">
+                    <h1 class="mb-4">Выбор абонемента на транспорт</h1>
+                    <div id="main-page" class="d-flex flex-wrap"><div/>
+                </div>
+            `
+        )
+    }
+
     getData() {
-        return {
-            id: 1,
-            src: "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-            title: "Акция",
-            text: "У меня есть крутая акция"
-        }
+        return [
+            {
+                id: 1,
+                src: "metro.png",
+                title: "Безлимитный проезд на метро в течении 30 дней",
+                text: "2500 рублей"
+            },
+            {
+                id: 2,
+                src: "mcc.png",
+                title: "Метро + МЦК + МЦД на 30 дней",
+                text: "3200 рублей"
+            },
+            {
+                id: 3,
+                src: "prigorod.png",
+                title: "Весь транспорт + зона пригорода на 30 дней",
+                text: "4300 рублей"
+            },
+        ]
+    }
+
+    clickCard(e) {
+        const cardId = e.target.dataset.id
+
+        const productPage = new ProductPage(this.parent, cardId)
+        productPage.render()
     }
 
     render() {
+        this.parent.innerHTML = ''
+        const html = this.getHTML()
+        this.parent.insertAdjacentHTML('beforeend', html)
+
         const data = this.getData()
-        const productCard = new ProductCardComponent(this.parent)
-        productCard.render(data)
+        data.forEach((item) => {
+            const productCard = new ProductCardComponent(this.pageRoot)
+            productCard.render(item, this.clickCard.bind(this))
+        })
     }
 }
