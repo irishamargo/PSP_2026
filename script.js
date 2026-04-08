@@ -29,34 +29,28 @@ window.onload = function(){
     function onDigitButtonClicked(digit) {
         // Если операция не выбрана, работаем с первым числом (a) - после выбора операции начинается ввод второго числа
         if (!selectedOperation) {
+            if (a.length >= MAX_DISPLAY_LENGTH) {
+                return;
+            }
             if (digit === '.' && a === '') {
                 a = '0.'
             }
             else if ((digit != '.') || (digit == '.' && !a.includes(digit))) {
-                if (a !== '') {
-                    a = parseFloat(a).toString();
-                }
                 a += digit;
-            }
-            if (a.length >= MAX_DISPLAY_LENGTH) {
-                a = (parseFloat(a).toExponential(10)).toString();
             }
             outputElement.innerHTML = a;
         }
         // Если операция выбрана, работаем со вторым числом (b)
         else {
+            if (b.length >= MAX_DISPLAY_LENGTH) {
+                return;
+            }
             if (digit === '.' && b === '') {
                 b = '0.';
                 outputElement.innerHTML = b;
             }
             else if ((digit != '.') || (digit == '.' && !b.includes(digit))) {
-                if (b !== '') {
-                    b = parseFloat(b).toString();
-                }
                 b += digit;
-            }
-            if (b.length >= MAX_DISPLAY_LENGTH) {
-                b = (parseFloat(b).toExponential(10)).toString();
             }
             outputElement.innerHTML = b;
         }
@@ -178,7 +172,7 @@ window.onload = function(){
         outputElement.innerHTML = 0
     }
 
-        document.getElementById("btn_op_equal").onclick = function() {
+    document.getElementById("btn_op_equal").onclick = function() {
         // Проверяем, что у нас есть оба числа и операция
         if (a === '' || b === '' || !selectedOperation)
             return
@@ -198,6 +192,9 @@ window.onload = function(){
                 break;
         }
 
+        if ((expressionResult.toString()).length >= MAX_DISPLAY_LENGTH) {
+            expressionResult = expressionResult.toExponential(10);
+        }
         a = expressionResult.toString()
         b = ''
         selectedOperation = null

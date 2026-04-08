@@ -1,0 +1,206 @@
+
+:root {
+  --bg-color: white;
+  --text-header: black;
+  --result-color: rgb(73, 73, 73);
+  --theme-btn: rgb(17, 19, 128);
+  --theme-honor: rgb(48, 51, 227);
+
+}
+[data-theme="dark"] {
+  --bg-color: rgb(32, 32, 32);
+  --text-header: white;
+  --result-color: #a6a6a6;
+  --theme-btn: rgb(241, 232, 106);
+  --theme-honor: rgb(235, 231, 168);
+}
+
+.my-btn {
+  margin-right: 5px;           /* задаем отступ от кнопки справа */
+  margin-top: 5px;             /* задаем отступ от кнопки сверху*/
+  width: 50px;                 /* задаем ширину кнопки */
+  height: 50px;                /* задаем высоту кнопки */
+  border-radius: 50%;          /* округляем кнопку */
+  border: none;                /* отключаем обводку */
+  background: #a6a6a6;         /* задаем серый цвет кнопки */
+  color: var(--bg-color);                /* задаем белый цвет текста внутри кнопки */
+  font-size: 1.5rem;           /* увеличим размер шрифта */
+  font-family: Arial, Helvetica, sans-serif; /* сменим шрифт */
+  cursor: pointer;             /* при наведении на кнопку курсор будет изменен
+                                  со стрелки на 'указательный палец' */
+  user-select: none;           /* отключаем возможность выделить текст внутри кнопки */
+}
+
+/* hover - это состояние элемента, когда на него наведен курсор */
+.my-btn:hover {
+  background: #636363;
+}
+
+/* active - это состояние активации элемента. В случае кнопки - нажатие на нее */
+.my-btn:active {
+  filter: brightness(130%); /* увеличим интенсивность цвета для эффекта вспышки */
+}
+
+/* селектор для кнопок первостепенных операций */
+.my-btn.primary {
+  background: rgb(212, 33, 45);
+}
+
+.my-btn.primary:hover {
+  background: rgb(162, 0, 11);
+}
+
+/* селектор для кнопок второстепенных операций */
+.my-btn.secondary {
+  background: #515151; /* цвет кнопки серый */
+}
+
+.my-btn.secondary:hover {
+  background: #353535; /* цвет кнопки серый */
+}
+
+/* селектор для кнопки расчета выражения (=) */
+.my-btn.execute {
+  width: 110px;          /* сделаем кнопку шире других */
+  border-radius: 34px;   /* подкорректируем округлость */
+}
+
+.my-btn.backspace {
+  width: 110px;
+  border-radius: 34px;
+  font-size: 1.2rem;
+}
+
+/* селектор для поля вывода результата */
+.result {
+  width: 220px;
+  height: 50px;
+  margin-bottom: 15px;         /* отступ снизу */
+  padding-right: 10px;         /* выступ справа */
+  background: var(--result-color); /* цвет можно задавать и таким образом */
+  text-align: right;           /* примагнитим текст к правой стороне */
+  color: var(--bg-color);              /* цвет текста белый */
+  font-size: 1.5rem;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 10px;
+  line-height: 50px;
+}
+
+.header {
+  background-color: var(--bg-color);
+  width: 100%;
+  height: 70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+}
+
+.theme-btn {
+  background: var(--bg-color);
+  color: var(--theme-btn);
+  width: 120px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--theme-btn);
+  margin-left: 90px;
+  font-size: 16px;
+  font-family: 'MoscowSans', 'Segoe UI', 'Arial', sans-serif;
+}
+
+.theme-btn:hover {
+  color: var(--theme-honor);
+  border: solid var(--theme-honor);
+}
+
+.theme-btn:active {
+  filter: brightness(130%);
+}
+
+h3{
+  color: var(--text-header);
+  margin-left: 90px;
+}
+
+h3:hover {
+  color: rgb(212, 33, 45);
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  color: white;
+}
+
+/* Надпись Московский метрополитен */
+.metro-title {
+  color: rgb(212, 33, 45);  /* Красный цвет метро */
+  font-size: 30px;
+  font-weight: bold;
+  font-family: 'MoscowSans', 'Segoe UI', 'Arial', sans-serif;
+  line-height: 0.8;
+  letter-spacing: 1px;
+  margin-left: 20px;
+  display: inline-block;
+}
+
+body {
+  padding-top: 120px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image.png');
+  background-size: cover;
+  background-position: top 0px center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.calculator {
+  text-align: center;
+  background: var(--bg-color);
+  width: fit-content;
+  border-radius: 20px;
+  margin: 0 auto;
+  padding: 25px;
+  flex: 1;
+}
+
+.contacts-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contacts {
+  background: var(--bg-color);
+  border-radius: 20px;
+  padding: 50px;
+  border: 4px solid rgb(212, 33, 45);
+}
+
+.footer {
+  background-color: var(--bg-color);
+  width: 100%;
+  margin-top: 120px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+h2 {
+  color: var(--text-header);
+  font-size: 16px;
+  font-family: 'MoscowSans', 'Segoe UI', 'Arial', sans-serif;
+  display: flex;
+}
+
+h4 {
+  color: var(--text-header);
+  font-size: 16px;
+}
