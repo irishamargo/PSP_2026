@@ -64,16 +64,47 @@ window.onload = function(){
         }
     });
 
+    function calculate() {
+        if (a === '' || b === '' || !selectedOperation)
+            return
+
+        switch(selectedOperation) {
+            case 'x':
+                expressionResult = (+a) * (+b)
+                break;
+            case '+':
+                expressionResult = (+a) + (+b)
+                break;
+            case '-':
+                expressionResult = (+a) - (+b)
+                break;
+            case '/':
+                expressionResult = (+a) / (+b)
+                break;
+        }
+        return expressionResult;
+    }
+
     document.getElementById("btn_op_mult").onclick = function() {
         if (a === '') return;
         selectedOperation = 'x';
     }
     document.getElementById("btn_op_plus").onclick = function() {
         if (a === '') return;
+        if (b !== '') {
+            a = calculate().toString();
+            b = '';
+            outputElement.innerHTML = a;
+        }
         selectedOperation = '+';
     }
     document.getElementById("btn_op_minus").onclick = function() {
         if (a === '') return;
+        if (b !== '') {
+            a = calculate().toString();
+            b = '';
+            outputElement.innerHTML = a;
+        }
         selectedOperation = '-';
     }
     document.getElementById("btn_op_div").onclick = function() {
@@ -163,13 +194,27 @@ window.onload = function(){
         }
     }
 
-    // Очищаем все значения при нажатии на кнопку C (вешаем обработчик события click на кнопку С)
+    // Очищаем все значения при нажатии на кнопку C
     document.getElementById("btn_op_clear").onclick = function() {
         a = ''
         b = ''
         selectedOperation = ''
         expressionResult = ''
         outputElement.innerHTML = 0
+        document.documentElement.style.setProperty('--text-result', 'white');
+    }
+
+    function updateResultColor(a) {
+        let num = parseFloat(a);
+        num = num % 16777216;
+        let hex = num.toString(16);
+
+        while (hex.length < 6) {
+            hex = '0' + hex;
+        }
+        hex = '#' + hex;
+
+        document.documentElement.style.setProperty('--text-result', hex);
     }
 
     document.getElementById("btn_op_equal").onclick = function() {
@@ -200,5 +245,6 @@ window.onload = function(){
         selectedOperation = null
 
         outputElement.innerHTML = a
+        updateResultColor(a);
     }
 };
