@@ -6,17 +6,15 @@ export class ProductComponent {
     getHTML(data) {
         return (
             `
-                <div class="card mb-3" style="width: 540px;">
+                <div class="card mb-3" style="width: 540px; margin: 0 auto; overflow: hidden; border: none;">
                     <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="${data.src}" class="img-fluid" alt="картинка">
+                        <div style="width: 100%; height: 300px; overflow: hidden; border-radius: 10px;">
+                            <img src="${data.src}" class="img-fluid" alt="картинка" style="object-fit: cover; display: block;">
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">${data.title}</h5>
-                                <p class="card-text">${data.text}</p>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title" style="font-weight: bold; font-size: 18px;">${data.title}</h5>
                         </div>
+
                     </div>
                 </div>
             `
