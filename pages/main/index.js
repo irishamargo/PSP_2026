@@ -1,6 +1,7 @@
 import {ProductCardComponent} from "../../components/product-card/index.js";
-import {ProductPage} from "../product/index.js";
+//import {ProductPage} from "../product/index.js";
 import { getAllPrices, updatePrice } from "../../global.js";
+import { show3DModel } from '../../viewer3d.js';
 
 export class MainPage {
     constructor(parent) {
@@ -49,29 +50,49 @@ export class MainPage {
     clickCard(e) {
         const cardId = e.target.dataset.id
 
-        const productPage = new ProductPage(this.parent, cardId)
-        productPage.render()
+        let modelPath = '';
+        let modelName = '';
+
+        switch(parseInt(cardId)) {
+            case 1:
+                modelPath = 'models/metro3d.glb';
+                modelName = 'Метро';
+                break;
+            case 2:
+                modelPath = 'models/mck3d.glb';
+                modelName = 'МЦК';
+                break;
+            case 3:
+                modelPath = 'models/mcd3d.glb';
+                modelName = 'МЦД';
+                break;
+        }
+
+        show3DModel(modelPath, modelName);
+
+        // const productPage = new ProductPage(this.parent, cardId)
+        // productPage.render()
     }
 
-    updateProductPrice(productId, newPrice) {
-        const card = document.querySelector(`#click-card-${productId}`)?.closest('.card');
-        if (card) {
-            const priceElement = card.querySelector('.card-text');
-            if (priceElement) {
-                priceElement.textContent = newPrice;
-            }
-        }
-    }
+    // updateProductPrice(productId, newPrice) {
+    //     const card = document.querySelector(`#click-card-${productId}`)?.closest('.card');
+    //     if (card) {
+    //         const priceElement = card.querySelector('.card-text');
+    //         if (priceElement) {
+    //             priceElement.textContent = newPrice;
+    //         }
+    //     }
+    // }
 
     render() {
         this.parent.innerHTML = ''
         const html = this.getHTML()
         this.parent.insertAdjacentHTML('beforeend', html)
 
-        window.addEventListener('priceUpdated', (event) => {
-            const { productId, newPrice } = event.detail;
-            this.updateProductPrice(productId, newPrice);
-        });
+        // window.addEventListener('priceUpdated', (event) => {
+        //     const { productId, newPrice } = event.detail;
+        //     this.updateProductPrice(productId, newPrice);
+        // });
 
         const data = this.getData()
         data.forEach((item) => {
