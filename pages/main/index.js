@@ -16,34 +16,23 @@ export class MainPage {
             `
                 <div class="container mt-4">
                     <h1 class="mb-4">Выбор абонемента на транспорт</h1>
-                    <div id="main-page" class="d-flex flex-wrap justify-content-center"></div>
+                    <div id="main-page" class="d-flex flex-wrap justify-content-start"></div>
                 </div>
             `
         )
     }
 
-    getData() {
-        const prices = getAllPrices();
-        return [
-            {
-                id: 1,
-                src: "metro.png",
-                title: "Безлимитный проезд на метро на 30 дней",
-                text: prices[1]
-            },
-            {
-                id: 2,
-                src: "mcc.png",
-                title: "Метро + МЦК + МЦД на 30 дней",
-                text: prices[2]
-            },
-            {
-                id: 3,
-                src: "prigorod.png",
-                title: "Весь транспорт + зона пригорода на 30 дней",
-                text: prices[3]
-            },
-        ]
+    async getData() {
+        try {
+            const response = await fetch('http://localhost:3000/stocks');
+            const stocks = await response.json();
+            console.log('Тип данных:', typeof stocks);
+            console.log('Данные:', stocks);
+            return stocks;
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
+            return [];
+        }
     }
 
     clickCard(e) {
@@ -63,7 +52,7 @@ export class MainPage {
         }
     }
 
-    render() {
+    async render() {
         this.parent.innerHTML = ''
         const html = this.getHTML()
         this.parent.insertAdjacentHTML('beforeend', html)
@@ -73,7 +62,7 @@ export class MainPage {
             this.updateProductPrice(productId, newPrice);
         });
 
-        const data = this.getData()
+        const data = await this.getData()
         data.forEach((item) => {
             const productCard = new ProductCardComponent(this.pageRoot)
             productCard.render(item, this.clickCard.bind(this))
