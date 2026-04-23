@@ -1,3 +1,10 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 function flatten(arr) {
     let result = [];
 
@@ -13,4 +20,13 @@ function flatten(arr) {
     return result;
 }
 
-console.log(flatten([1, 2, 3, [4, 5, 6, [10, 20, 30], 7]]));
+rl.question('Введите массив: ', (answer) => {
+    try {
+        let input = answer.trim();
+        const arr = eval(input);
+        console.log('Развёрнутый массив:', flatten(arr));
+    } catch (error) {
+        console.log('Ошибка! Введите массив в правильном формате, например: [1,2,[3,4]]');
+    }
+    rl.close();
+});

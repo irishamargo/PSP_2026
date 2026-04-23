@@ -1,3 +1,10 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 function sumOfUnique(arr) {
     let result = 0;
 
@@ -10,4 +17,8 @@ function sumOfUnique(arr) {
     return result;
 }
 
-console.log(sumOfUnique([1, 2, 3, 2, 4, 1, 5]));
+rl.question('Введите числа через запятую: ', (answer) => {
+    const arr = answer.split(',').map(Number);
+    console.log('Сумма уникальных элементов:', sumOfUnique(arr));
+    rl.close();
+});
