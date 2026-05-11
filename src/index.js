@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
 const stocksRouter = require('./routes/stocks');
 const stocksService = require('./services/stocksService');
 
@@ -11,7 +10,6 @@ const DATA_FILE_PATH = path.join(__dirname, 'data', 'stocks.json');
 
 stocksService.init(DATA_FILE_PATH);
 
-app.use(cors());
 app.use(express.json());
 
 app.use((req, res, next) => {
