@@ -38,12 +38,7 @@ export class AccordionComponent {
                 </h2>
                 <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
                 <div class="accordion-body">
-                    <span
-                        id="price"
-                        style="cursor: pointer;"
-                        contenteditable="true"
-                        onblur="if(window.onPriceChange) window.onPriceChange(this.innerText)"
-                        onkeypress="if(event.key === 'Enter') this.blur()">${data.cost}</span>
+                    ${data.cost}
                 </div>
                 </div>
             </div>

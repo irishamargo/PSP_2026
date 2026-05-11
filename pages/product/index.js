@@ -3,6 +3,8 @@ import {ProductComponent} from "../../components/product/index.js";
 import { AccordionComponent } from "../../components/accordion/index.js";
 import {MainPage} from "../main/index.js";
 import { getPrice, updatePrice } from "../../global.js";
+import { ajax } from "../../modules/ajax.js";
+import { stockUrls } from "../../modules/stockUrls.js";
 
 export class ProductPage {
     constructor(parent, id) {
@@ -11,34 +13,9 @@ export class ProductPage {
     }
 
     getData() {
-        const abonement = {
-            1: {
-                id: 1,
-                src: "metro.png",
-                title: `Безлимитный проезд на метро на 30 дней`,
-                text: "Данный абонемент позволяет совершать неограниченное число поездок на метро по всей Москве",
-                period: "30 дней",
-                cost: getPrice(1)
-
-            },
-            2: {
-                id: 2,
-                src: "mcc.png",
-                title: `Метро + МЦК + МЦД на 30 дней`,
-                text: "Данный абонемент позволяет совершать неограниченное число поездок на метро, мцк и мцд в пределах Москвы, делать пересадки между всеми этими видами транспорта",
-                period: "30 дней",
-                cost: getPrice(2)
-            },
-            3: {
-                id: 3,
-                src: "prigorod.png",
-                title: `Весь транспорт + зона пригорода на 30 дней`,
-                text: "Данный абонемент позволяет совершать неограниченное число поездок на метро, мцк и мцд в пределах Москвы и Московской области, делать пересадки между всеми этими видами транспорта",
-                period: "30 дней",
-                cost: getPrice(3),
-            }
-        };
-        return abonement[this.id];
+        ajax.get(stockUrls.getStockById(this.id), (data) => {
+            this.renderData(data);
+        });
     }
 
     get pageRoot() {
@@ -62,6 +39,21 @@ export class ProductPage {
         updatePrice(this.id, newPrice);
     }
 
+    renderData(item) {
+        const product = new ProductComponent(this.pageRoot);
+        product.render(item);
+
+        const accordion = new AccordionComponent(this.pageRoot);
+
+        const accordionData = {
+            text: item.description || 'Нет описания',
+            period: item.period || '30 дней',
+            cost: item.text || 'Цена не указана'
+        };
+
+        accordion.render(accordionData);
+    }
+
     render() {
         this.parent.innerHTML = ''
         const html = this.getHTML()
@@ -70,11 +62,6 @@ export class ProductPage {
         //const backButton = new BackButtonComponent(this.pageRoot)
         //backButton.render(this.clickBack.bind(this))
 
-        const data = this.getData()
-        const product = new ProductComponent(this.pageRoot)
-        product.render(data)
-
-        const accordion = new AccordionComponent(this.pageRoot);
-        accordion.render(data, (newPrice) => this.changePrice(newPrice));
+        this.getData();
     }
 }
