@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "src": "metro.png",
+    "src": "https://avatars.mds.yandex.net/i?id=2d23903752708d7a2ea6a80c50c0afa13d9f3029-12428376-images-thumbs&n=13",
     "title": "Безлимитный проезд на метро на 30 дней",
     "text": "2500 рублей",
     "period": "30 дней",
@@ -9,7 +9,7 @@
   },
   {
     "id": 2,
-    "src": "mcc.png",
+    "src": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Открытие_северного_терминала_ТПУ_«Стрешнево»_%28С._Собянин%2C_М._Хуснуллин%29_1.jpg",
     "title": "Метро + МЦК + МЦД на 30 дней",
     "period": "30 дней",
     "text": "3200 рублей",
@@ -17,7 +17,7 @@
   },
   {
     "id": 3,
-    "src": "prigorod.png",
+    "src": "https://cdnn21.img.ria.ru/images/07e8/0c/0d/1989131534_0:161:3071:1888_1280x0_80_0_0_153547c36f79d5589131c8ea17f22c88.jpg",
     "title": "Весь транспорт + зона пригорода на 30 дней",
     "period": "30 дней",
     "text": "5000 рублей",
