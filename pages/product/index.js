@@ -3,8 +3,6 @@ import {ProductComponent} from "../../components/product/index.js";
 import { AccordionComponent } from "../../components/accordion/index.js";
 import {MainPage} from "../main/index.js";
 import { getPrice, updatePrice } from "../../global.js";
-import { ajax } from "../../modules/ajax.js";
-import { stockUrls } from "../../modules/stockUrls.js";
 
 export class ProductPage {
     constructor(parent, id) {
@@ -12,10 +10,14 @@ export class ProductPage {
         this.id = id
     }
 
-    getData() {
-        ajax.get(stockUrls.getStockById(this.id), (data) => {
+    async getData() {
+        try {
+            const response = await fetch(`http://localhost:3000/stocks/${this.id}`);
+            const data = await response.json();
             this.renderData(data);
-        });
+        } catch (error) {
+            console.error('Ошибка загрузки:', error);
+        }
     }
 
     get pageRoot() {

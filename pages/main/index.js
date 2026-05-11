@@ -1,8 +1,6 @@
 import {ProductCardComponent} from "../../components/product-card/index.js";
 import {ProductPage} from "../product/index.js";
 import { getAllPrices, updatePrice } from "../../global.js";
-import {ajax} from "../../modules/ajax.js";
-import {stockUrls} from "../../modules/stockUrls.js";
 
 export class MainPage {
     constructor(parent) {
@@ -45,6 +43,7 @@ export class MainPage {
                     <div class="mb-2">
                         <input type="text" id="newDescription" class="form-control" placeholder="Описание">
                     </div>
+                    <button id="submitAddBtn" class="btn btn-primary">Сохранить</button>
                     <button id="cancelAddBtn" class="btn btn-secondary">Отмена</button>
                 </div>
 
@@ -66,6 +65,7 @@ export class MainPage {
                     <div class="mb-2">
                         <input type="text" id="editDescription" class="form-control" placeholder="Описание">
                     </div>
+                    <button id="submitEditBtn" class="btn btn-primary">Сохранить</button>
                     <button id="cancelEditBtn" class="btn btn-secondary">Отмена</button>
                 </div>
 
@@ -75,10 +75,14 @@ export class MainPage {
         )
     }
 
-    getData() {
-        ajax.get(stockUrls.getStocks(), (data) => {
+    async getData() {
+        try {
+            const response = await fetch('http://localhost:3000/stocks');
+            const data = await response.json();
             this.renderData(data);
-        })
+        } catch (error) {
+            console.error('Ошибка загрузки:', error);
+        }
     }
 
     clickCard(e) {
@@ -88,8 +92,50 @@ export class MainPage {
         productPage.render()
     }
 
-    showEditForm(id) {
-        ajax.get(stockUrls.getStockById(id), (data) => {
+    async addNewStock() {
+        const src = document.getElementById('newSrc').value;
+        const title = document.getElementById('newTitle').value;
+        const text = document.getElementById('newText').value;
+        const period = document.getElementById('newPeriod').value;
+        const description = document.getElementById('newDescription').value;
+
+        if (!src || !title || !text) {
+            alert('Заполните обязательные поля (src, title, text)!');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/stocks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ src, title, text, period, description })
+            });
+
+            if (response.ok) {
+                alert('Карточка добавлена!');
+                document.getElementById('addForm').style.display = 'none';
+                document.getElementById('newSrc').value = '';
+                document.getElementById('newTitle').value = '';
+                document.getElementById('newText').value = '';
+                document.getElementById('newPeriod').value = '';
+                document.getElementById('newDescription').value = '';
+                this.getData();
+            } else {
+                alert('Ошибка при добавлении карточки');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Не удалось добавить карточку');
+        }
+    }
+
+    async showEditForm(id) {
+        try {
+            const response = await fetch(`http://localhost:3000/stocks/${id}`);
+            const data = await response.json();
+
             if (data) {
                 document.getElementById('editId').value = data.id;
                 document.getElementById('editSrc').value = data.src;
@@ -100,7 +146,44 @@ export class MainPage {
                 document.getElementById('editForm').style.display = 'block';
                 document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' });
             }
-        });
+        } catch (error) {
+            console.error('Ошибка загрузки карточки для редактирования:', error);
+        }
+    }
+
+    async saveEdit() {
+        const id = parseInt(document.getElementById('editId').value);
+        const src = document.getElementById('editSrc').value;
+        const title = document.getElementById('editTitle').value;
+        const text = document.getElementById('editText').value;
+        const period = document.getElementById('editPeriod').value;
+        const description = document.getElementById('editDescription').value;
+
+        if (!src || !title || !text) {
+            alert('Заполните обязательные поля (src, title, text)!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/stocks/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ src, title, text, period, description })
+            });
+
+            if (response.ok) {
+                alert('Карточка обновлена!');
+                document.getElementById('editForm').style.display = 'none';
+                this.getData();  // Перезагружаем список
+            } else {
+                alert('Ошибка при обновлении карточки');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Не удалось обновить карточку');
+        }
     }
 
     cancelEdit() {
@@ -113,20 +196,23 @@ export class MainPage {
         document.getElementById('editDescription').value = '';
     }
 
-    deleteStock(id) {
-        if (confirm(`Удалить карточку с ID ${id}?`)) {
-            ajax.delete(stockUrls.removeStockById(id), (data, status) => {
-                if (status === 204) {
-                    alert('Карточка удалена!');
+    async deleteStock(id) {
+        if (confirm('Удалить карточку?')) {
+            try {
+                const response = await fetch(`http://localhost:3000/stocks/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    alert('Удалено!');
                     this.getData();
-                } else {
-                    alert('Ошибка при удалении карточки');
                 }
-            });
+            } catch (error) {
+                console.error('Ошибка удаления:', error);
+            }
         }
     }
 
-    searchCards() {
+    async searchCards() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
         if (searchTerm === '') {
@@ -134,12 +220,17 @@ export class MainPage {
             return;
         }
 
-        ajax.get(stockUrls.getStocks(), (data) => {
+        try {
+            const response = await fetch('http://localhost:3000/stocks');
+            const data = await response.json();
+
             const filtered = data.filter(item =>
                 item.title.toLowerCase().includes(searchTerm)
             );
             this.renderData(filtered);
-        });
+        } catch (error) {
+            console.error('Ошибка поиска:', error);
+        }
     }
 
     renderData(items) {
@@ -164,6 +255,11 @@ export class MainPage {
             };
         }
 
+        const submitAddBtn = document.getElementById('submitAddBtn');
+        if (submitAddBtn) {
+            submitAddBtn.onclick = () => this.addNewStock();
+        }
+
         const cancelBtn = document.getElementById('cancelAddBtn');
         if (cancelBtn) {
             cancelBtn.onclick = () => {
@@ -172,6 +268,11 @@ export class MainPage {
                 document.getElementById('newTitle').value = '';
                 document.getElementById('newText').value = '';
             };
+        }
+
+        const submitEditBtn = document.getElementById('submitEditBtn');
+        if (submitEditBtn) {
+            submitEditBtn.onclick = () => this.saveEdit();
         }
 
         const cancelEditBtn = document.getElementById('cancelEditBtn');
