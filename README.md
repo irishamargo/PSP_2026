@@ -84,7 +84,7 @@ git push --set-upstream origin calculator_operation
 
 ## Пример программы
 
-```cpp
+```javascript
 // Основные переменные для хранения чисел и операций
 let a = '';              // Первое число
 let b = '';              // Второе число
