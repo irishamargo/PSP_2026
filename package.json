@@ -2,6 +2,7 @@
   "name": "html_2026",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
   "homepage": "https://github.com/irishamargo/PSP_2026#readme",
   "bugs": {
     "url": "https://github.com/irishamargo/PSP_2026/issues"
@@ -25,6 +26,5 @@
   },
   "devDependencies": {
     "vite": "^8.0.12"
-  },
-  "keywords": []
+  }
 }
